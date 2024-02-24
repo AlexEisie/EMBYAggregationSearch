@@ -16,6 +16,7 @@
 #include<QMessageBox>
 #include<QFile>
 #include<QTextStream >
+#include<QUrlQuery>
 #include "ui_EMBYAggregationSearch.h"
 
 
@@ -207,6 +208,65 @@ private slots:
 		file.close();
 	}
 
+	void onLogin()
+	{
+		QString URL = ui.Login_ServerURL->text();
+		QString Username = ui.Login_Username->text();
+		QString Password = ui.Login_Password->text();
+		if (URL.isEmpty() || Username.isEmpty())
+			return;
+		QUrl url(URL+"/emby/Users/authenticatebyname?X-Emby-Client=Emby+Web&X-Emby-Device-Id=dvid&X-Emby-Client-Version=4.8.1.0&X-Emby-Language=zh-cn");
+		QNetworkRequest request(url);
+		QNetworkAccessManager* lgmanager = new QNetworkAccessManager(this);
+		request.setHeader(QNetworkRequest::ContentTypeHeader, "application/x-www-form-urlencoded; charset=UTF-8");
+
+		QUrlQuery params;
+		params.addQueryItem("Username", Username);
+		params.addQueryItem("Pw", Password);  // 这里是负载
+
+		QNetworkReply* reply = lgmanager->post(request, params.query().toUtf8());
+		connect(reply, &QNetworkReply::finished, this, [=]() {
+			loginrequestfinished(reply);
+			});
+	}
+
+	void loginrequestfinished(QNetworkReply* reply)
+	{
+		QString ERRORmsg;
+		// 获取http状态码
+		QVariant statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
+		if (statusCode.isValid())
+			ERRORmsg += QString("status code=%1").arg(statusCode.toInt());
+
+		QVariant reason = reply->attribute(QNetworkRequest::HttpReasonPhraseAttribute).toString();
+		if (reason.isValid())
+			ERRORmsg += QString("reason=%1").arg(reason.toString());
+
+		QNetworkReply::NetworkError err = reply->error();
+		if (err != QNetworkReply::NoError)
+		{
+			ERRORmsg += QString("Failed: %1").arg(reply->errorString());
+			QMessageBox::warning(NULL, "WARNING", ERRORmsg, QMessageBox::Yes, QMessageBox::Yes);
+		}
+		else
+		{
+			// 获取返回内容
+			//Result += reply->readAll();
+			// QJsonParseError类用于在JSON解析期间报告错误。
+			QJsonParseError jsonError;
+			// 将json解析为UTF-8编码的json文档，并从中创建一个QJsonDocument。
+			// 如果解析成功，返回QJsonDocument对象，否则返回null
+			QJsonDocument result_doc = QJsonDocument::fromJson(reply->readAll(), &jsonError);
+			// 判断是否解析失败
+			if (jsonError.error != QJsonParseError::NoError && !result_doc.isNull()) {
+				qDebug() << "Json格式错误！" << jsonError.error;
+				return;
+			}
+			QJsonObject result_json = result_doc.object();
+			QString AccessToken = result_json.value("AccessToken").toString();
+			ui.Login_Token->setText(AccessToken);
+		}
+	}
 
 };
 

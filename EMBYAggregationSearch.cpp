@@ -14,7 +14,7 @@ EMBYAggregationSearch::EMBYAggregationSearch(QWidget *parent)
     connect(ui.GlobalSearch, SIGNAL(clicked()), this, SLOT(onGlobalSearch()));
     connect(ui.AddServer, SIGNAL(clicked()), this, SLOT(onAddServer()));
 
-
+    connect(ui.Login, SIGNAL(clicked()), this, SLOT(onLogin()));
     ReadConfig();
 
 }

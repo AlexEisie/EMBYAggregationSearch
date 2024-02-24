@@ -203,6 +203,87 @@
        </property>
       </widget>
      </widget>
+     <widget class="QGroupBox" name="groupBox_2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>100</y>
+        <width>591</width>
+        <height>111</height>
+       </rect>
+      </property>
+      <property name="title">
+       <string>登录获取Token</string>
+      </property>
+      <widget class="QLineEdit" name="Login_ServerURL">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>20</y>
+         <width>361</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>ServerURL Example:https://emby.bilibili.com</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="Login_Username">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>50</y>
+         <width>201</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Username</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="Login_Password">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>80</y>
+         <width>201</width>
+         <height>20</height>
+        </rect>
+       </property>
+       <property name="placeholderText">
+        <string>Password(Wont be Saved)</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="Login">
+       <property name="geometry">
+        <rect>
+         <x>220</x>
+         <y>50</y>
+         <width>151</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>LOG IN</string>
+       </property>
+      </widget>
+      <widget class="QTextEdit" name="Login_Token">
+       <property name="geometry">
+        <rect>
+         <x>380</x>
+         <y>20</y>
+         <width>201</width>
+         <height>81</height>
+        </rect>
+       </property>
+       <property name="cursor" stdset="0">
+        <cursorShape>IBeamCursor</cursorShape>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
     </widget>
    </widget>
   </widget>
